@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import {number, z} from 'zod'
+import { z } from 'zod'
 
 const envSchema = z.object({
     NODE_ENV:z.enum(['development','test','production']).default('development'),
