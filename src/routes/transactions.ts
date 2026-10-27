@@ -5,7 +5,6 @@ import { z } from 'zod'
 
 export async function transactionsRoutes (app:FastifyInstance) {
     app.post('/', async (request, reply) => {
-
         const createTransactionBodySchema = z.object ({
             title: z.string(),
             amount: z.number(),
@@ -21,7 +20,6 @@ export async function transactionsRoutes (app:FastifyInstance) {
         })
 
         return reply.status(201).send()
-
     })
 
     app.get('/', async () => {
@@ -29,6 +27,20 @@ export async function transactionsRoutes (app:FastifyInstance) {
 
         return {
             transactions
+        }
+    })
+
+    app.get('/:id', async (request) => {
+        const transactionParamsSchema = z.object ({
+            id: z.string().uuid()
+        })
+
+        const {id} = transactionParamsSchema.parse(request.params)
+
+        const transaction = await knex('transactions').where('id', id).first()
+
+        return {
+            transaction
         }
     })
 }
