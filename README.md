@@ -8,5 +8,5 @@
 #RN
 
 - [x] Transaçôes podem depositar ou sacar valores
-- [ ] Deve ser possível identificar o usuário entre as requisições
-- [ ] Usuário só deve poder visualizar as próprias transações
+- [x] Deve ser possível identificar o usuário entre as requisições
+- [x] Usuário só deve poder visualizar as próprias transações
