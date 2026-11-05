@@ -1,6 +1,7 @@
-import { expect, test, beforeAll, afterAll, describe } from 'vitest'
+import { expect, test, beforeAll, afterAll, beforeEach, afterEach, describe } from 'vitest'
 import supertest from 'supertest'
 import { app } from '../src/app'
+import { execSync } from 'node:child_process'
 
 beforeAll ( async () => {
     await app.ready()
@@ -9,6 +10,15 @@ beforeAll ( async () => {
 afterAll ( async () => {
     await app.close()
 })
+
+beforeEach (async () => {
+    execSync('npm run knex migrate:latest')
+})
+
+afterEach (async () => {
+    execSync('npm run knex migrate:rollback --all')
+})
+
 
 describe ('Transaction routes', () => {
     test ('create new transaction', async () => {
@@ -26,7 +36,7 @@ describe ('Transaction routes', () => {
             type: 'deposit'
         })
         
-        const cookies = createTransactionResponse.get('Set-Cookie')
+        const cookies = createTransactionResponse.get('Set-Cookie')! // This ! is here so TS can understand Cookie is not undefined
 
         const listTransactionResponse = await supertest(app.server).get('/transactions').set('Cookie', cookies).expect(200)
 
