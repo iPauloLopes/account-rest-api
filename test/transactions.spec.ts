@@ -70,6 +70,24 @@ describe ('Transaction routes', () => {
             })
         )
     })
+
+    test.only ('check account balance', async () => {
+        const createTransactionResponse = await supertest(app.server).post('/transactions').send({
+            title: 'Test transaction',
+            amount: 100,
+            type: 'deposit'
+        })
+        
+        const cookies = createTransactionResponse.get('Set-Cookie')! // This ! is here so TS can understand Cookie is not undefined
+
+        await supertest(app.server).post('/transactions').set('Cookie', cookies).send({
+            title: 'Test transaction 2',
+            amount: 50,
+            type: 'withdraw'
+        })
+
+        const getBalance = await supertest(app.server).get('/transactions/balance').set('Cookie', cookies).expect(200)
+
+        expect(getBalance.body.balance).toEqual({amount: 50})
+    })
 })
-
-
