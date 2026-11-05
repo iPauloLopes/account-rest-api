@@ -47,6 +47,29 @@ describe ('Transaction routes', () => {
             })
         ])
     })
+
+    test ('search transaction by id', async () => {
+        const createTransactionResponse = await supertest(app.server).post('/transactions').send({
+            title: 'Test transaction',
+            amount: 100,
+            type: 'deposit'
+        })
+        
+        const cookies = createTransactionResponse.get('Set-Cookie')! // This ! is here so TS can understand Cookie is not undefined
+
+        const listTransactionResponse = await supertest(app.server).get('/transactions').set('Cookie', cookies).expect(200)
+
+        const transactionId = listTransactionResponse.body.transactions[0].id
+
+        const getTransactionResponse = await supertest(app.server).get(`/transactions/${transactionId}`).set('Cookie', cookies).expect(200)
+
+        expect(getTransactionResponse.body.transaction).toEqual(
+            expect.objectContaining ({
+                title: 'Test transaction',
+                amount: 100
+            })
+        )
+    })
 })
 
 
