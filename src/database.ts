@@ -1,4 +1,4 @@
-import {knex as setUpKnex, Knex} from 'knex'
+import setUpKnex, { type Knex } from 'knex'
 import { env } from './env/index.js';
 
 export const knexConfig:Knex.Config = {
