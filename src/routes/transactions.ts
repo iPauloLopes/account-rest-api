@@ -1,5 +1,5 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { knex } from '../database';
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { knex } from '../database.js';
 import crypto from 'node:crypto'
 import { z } from 'zod'
 
